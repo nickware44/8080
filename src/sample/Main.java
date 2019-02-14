@@ -9,15 +9,18 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("UI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("UI.fxml"));
+        Parent root = loader.load();
+        final Controller C = loader.getController();
         primaryStage.setTitle("8080");
-        primaryStage.setScene(new Scene(root, 700, 500));
+        primaryStage.setScene(new Scene(root, 900, 700));
         primaryStage.show();
 
         RegisterSystem RS = new RegisterSystem();
         CommandSystem CS = new CommandSystem(RS);
 
-        System.out.println(CS.InputCommand("MVI A, FF"));
+        C.setCS(CS);
+        //System.out.println(CS.InputCommand("MVI A, FF"));
         //System.out.println(RS.getRegisterA());
     }
 
