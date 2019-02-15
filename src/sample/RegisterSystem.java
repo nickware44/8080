@@ -4,31 +4,31 @@ public class RegisterSystem {
     private short [] Registers = new short[7];
 
     public void setRegisterA(short Data) {
-        Registers[0] = Data;
+        Registers[0] = (short)(Data&0xFF);
     }
 
     public void setRegisterB(short Data) {
-        Registers[1] = Data;
+        Registers[1] = (short)(Data&0xFF);
     }
 
     public void setRegisterC(short Data) {
-        Registers[2] = Data;
+        Registers[2] = (short)(Data&0xFF);
     }
 
     public void setRegisterD(byte Data) {
-        Registers[3] = Data;
+        Registers[3] = (short)(Data&0xFF);
     }
 
     public void setRegisterE(short Data) {
-        Registers[4] = Data;
+        Registers[4] = (short)(Data&0xFF);
     }
 
     public void setRegisterH(short Data) {
-        Registers[5] = Data;
+        Registers[5] = (short)(Data&0xFF);
     }
 
     public void setRegisterL(short Data) {
-        Registers[6] = Data;
+        Registers[6] = (short)(Data&0xFF);
     }
 
     public short getRegisterA() {

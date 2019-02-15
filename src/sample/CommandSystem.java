@@ -135,6 +135,10 @@ public class CommandSystem {
             case "C6":
                 RS.setRegisterA((short)(RS.getRegisterA()+Operands.get(0)));
                 break;
+
+            case "3E":
+                RS.setRegisterA(Operands.get(0).shortValue());
+                break;
         }
     }
 }

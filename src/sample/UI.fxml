@@ -19,44 +19,47 @@
    <children>
       <Pane prefHeight="700.0" prefWidth="900.0" GridPane.halignment="LEFT" GridPane.valignment="TOP">
          <children>
-            <TextArea fx:id="UICodeArea" layoutX="14.0" layoutY="43.0" prefHeight="440.0" prefWidth="719.0" />
-            <MenuBar prefHeight="25.0" prefWidth="900.0">
-              <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                        <MenuItem mnemonicParsing="false" text="New" />
-                        <MenuItem mnemonicParsing="false" text="Open" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As" />
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Run">
-                  <items>
-                    <MenuItem mnemonicParsing="false" onAction="#RunCodeFull" text="Run" />
-                        <MenuItem mnemonicParsing="false" onAction="#RunCodeStep" text="Run step" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-            </MenuBar>
-            <TableView layoutX="738.0" layoutY="43.0" prefHeight="198.0" prefWidth="150.0">
-              <columns>
-                <TableColumn prefWidth="75.0" text="Register" />
-                <TableColumn prefWidth="75.0" text="Value" />
-              </columns>
-            </TableView>
-            <TableView layoutX="738.0" layoutY="250.0" prefHeight="145.0" prefWidth="150.0">
-               <columns>
-                  <TableColumn prefWidth="75.0" text="Memory" />
-                  <TableColumn prefWidth="75.0" text="Value" />
-               </columns>
-            </TableView>
-            <TextArea fx:id="UILogArea" layoutX="14.0" layoutY="489.0" prefHeight="191.0" prefWidth="874.0" />
+             <Pane fx:id="UICodePanel" layoutX="14.0" layoutY="43.0" prefHeight="440.0" prefWidth="40.0" style="-fx-background-color: #171717;" />
+             <TextArea fx:id="UICodeArea" layoutX="54.0" layoutY="43.0" prefHeight="440.0" prefWidth="679.0" onTextChange="#onCodeTextChange" onScroll="#onCodeTextScroll" />
+             <MenuBar prefHeight="25.0" prefWidth="900.0">
+                 <menus>
+                     <Menu mnemonicParsing="false" text="File">
+                         <items>
+                             <MenuItem mnemonicParsing="false" onAction="#FileNew" text="New" />
+                             <MenuItem mnemonicParsing="false" onAction="#FileOpen" text="Open" />
+                             <MenuItem mnemonicParsing="false" onAction="#FileSave" text="Save" />
+                             <MenuItem mnemonicParsing="false" onAction="#FileSaveAs" text="Save As" />
+                             <MenuItem mnemonicParsing="false" onAction="#Close" text="Close" />
+                         </items>
+                     </Menu>
+                     <Menu mnemonicParsing="false" text="Run">
+                         <items>
+                             <MenuItem mnemonicParsing="false" onAction="#RunCodeFull" text="Run" />
+                             <MenuItem mnemonicParsing="false" onAction="#RunCodeStep" text="Run step" />
+                             <MenuItem mnemonicParsing="false" onAction="#ResetSystem" text="Reset" />
+                             <MenuItem mnemonicParsing="false" onAction="#ClearLog" text="Clear log" />
+                         </items>
+                     </Menu>
+                     <Menu mnemonicParsing="false" text="Help">
+                         <items>
+                             <MenuItem mnemonicParsing="false" text="About" />
+                         </items>
+                     </Menu>
+                 </menus>
+             </MenuBar>
+             <TableView fx:id="UIRegisterTable" layoutX="738.0" layoutY="43.0" prefHeight="198.0" prefWidth="150.0">
+                 <columns>
+                     <TableColumn fx:id="UIRegisterTableNameColumn" prefWidth="75.0" text="Register" />
+                     <TableColumn fx:id="UIRegisterTableValueColumn" prefWidth="75.0" text="Value" />
+                 </columns>
+             </TableView>
+             <TableView layoutX="738.0" layoutY="250.0" prefHeight="145.0" prefWidth="150.0">
+                 <columns>
+                     <TableColumn prefWidth="75.0" text="Memory" />
+                     <TableColumn prefWidth="75.0" text="Value" />
+                 </columns>
+             </TableView>
+             <TextArea fx:id="UILogArea" layoutX="14.0" layoutY="489.0" prefHeight="191.0" prefWidth="874.0" />
          </children>
       </Pane>
    </children>

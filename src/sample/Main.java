@@ -19,9 +19,9 @@ public class Main extends Application {
         RegisterSystem RS = new RegisterSystem();
         CommandSystem CS = new CommandSystem(RS);
 
+        C.setStage(primaryStage);
         C.setCS(CS);
-        //System.out.println(CS.InputCommand("MVI A, FF"));
-        //System.out.println(RS.getRegisterA());
+        C.setRS(RS);
     }
 
     public static void main(String[] args) {
