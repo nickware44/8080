@@ -67,7 +67,7 @@ public class Controller {
 
     @FXML
     public void onCodeTextScroll() {
-        System.out.println("~~");
+        //System.out.println("~~");
         ShowLineNums();
     }
 
@@ -98,10 +98,8 @@ public class Controller {
                 Send2Log("[Open file] File opened: "+ActiveDataFileName);
             } catch (java.io.IOException ex) {
                 Send2Log("[Open file] Error opening file "+ActiveDataFileName);
-                return;
             }
         }
-
     }
 
     @FXML
@@ -164,6 +162,7 @@ public class Controller {
     @FXML
     public void RunCodeStep() {
         if (StepNum >= getCodeAreaLineCount()) StepNum = 0;
+        if (StepNum == 0) ResetSystem();
         String CurrentLine = UICodeArea.getText().split("\n").clone()[StepNum];
         if (!CurrentLine.equals("") && CS.InputCommand(CurrentLine) == -1) {
             Send2Log("[Run step] Error on line "+(StepNum+1));
@@ -176,6 +175,8 @@ public class Controller {
     @FXML
     public void ResetSystem() {
         CS.InputCommand("HLT");
+        StepNum = 0;
+        UpdateRegisterTable();
     }
 
     @FXML

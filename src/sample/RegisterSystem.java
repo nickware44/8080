@@ -65,4 +65,10 @@ public class RegisterSystem {
         M[1] = Registers[6];
         return M;
     }
+
+    public void ResetRegisters() {
+        for (int i = 0; i < 7; i++) {
+            Registers[i] = 0;
+        }
+    }
 }

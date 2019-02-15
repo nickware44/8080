@@ -139,6 +139,10 @@ public class CommandSystem {
             case "3E":
                 RS.setRegisterA(Operands.get(0).shortValue());
                 break;
+
+            case "76":
+                RS.ResetRegisters();
+                break;
         }
     }
 }
