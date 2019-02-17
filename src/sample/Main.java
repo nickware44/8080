@@ -17,11 +17,13 @@ public class Main extends Application {
         primaryStage.show();
 
         RegisterSystem RS = new RegisterSystem();
+        MemorySystem MS = new MemorySystem();
         CommandSystem CS = new CommandSystem(RS);
 
         C.setStage(primaryStage);
         C.setCS(CS);
         C.setRS(RS);
+        C.setMS(MS);
     }
 
     public static void main(String[] args) {

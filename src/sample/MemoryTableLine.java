@@ -1,22 +1,16 @@
 package sample;
 
-public class RegisterTableLine {
-    private String registerName;
+public class MemoryTableLine {
+    private int memoryAddress;
     private short value;
 
-    RegisterTableLine(String _registerName, short _value) {
-        registerName = _registerName;
+    MemoryTableLine(int _memoryAddress, short _value) {
+        memoryAddress = _memoryAddress;
         value = _value;
     }
 
-    public String getRegisterName() {
-        return registerName;
-    }
-
-    public String getValue() {
+    private String toHEX(int I, int Cap) {
         String ValueStr = "";
-        Short I = value;
-
         do {
             if (I%16 >= 10) ValueStr = (char)(I%16+55) + ValueStr;
             else ValueStr = (char)(I%16+48) + ValueStr;
@@ -24,6 +18,15 @@ public class RegisterTableLine {
         } while (I > 15);
         if (I >= 10) ValueStr = (char)(I+55) + ValueStr;
         else ValueStr = (char)(I+48) + ValueStr;
+        while (ValueStr.length() < Cap) ValueStr = "0" + ValueStr;
         return ValueStr;
+    }
+
+    public String getMemoryAddress() {
+        return toHEX(memoryAddress, 4);
+    }
+
+    public String getValue() {
+        return toHEX(value, 2);
     }
 }

@@ -23,6 +23,7 @@ import java.util.Date;
 
 public class Controller {
     private ObservableList<RegisterTableLine> RegisterTableList = FXCollections.observableArrayList();
+    private ObservableList<MemoryTableLine> MemoryTableList = FXCollections.observableArrayList();
 
     @FXML
     ScrollPane UICodePanel;
@@ -42,10 +43,20 @@ public class Controller {
     @FXML
     TableColumn<RegisterTableLine, String> UIRegisterTableValueColumn;
 
+    @FXML
+    TableView UIMemoryTable;
+
+    @FXML
+    TableColumn<MemoryTableLine, String> UIMemoryTableAddressColumn;
+
+    @FXML
+    TableColumn<MemoryTableLine, String> UIMemoryTableValueColumn;
+
     private Stage mStage;
     private int StepNum;
     private CommandSystem CS;
     private RegisterSystem RS;
+    private MemorySystem MS;
     private String ActiveDataFileName;
     private boolean RunSuccessFlag;
     private boolean ErrorFlag;
@@ -57,6 +68,8 @@ public class Controller {
         ShowLineNums();
         UIRegisterTableNameColumn.setCellValueFactory(new PropertyValueFactory<>("registerName"));
         UIRegisterTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        UIMemoryTableAddressColumn.setCellValueFactory(new PropertyValueFactory<>("memoryAddress"));
+        UIMemoryTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
 
         UICodeArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> ShiftLineNums());
         UICodePanel.vvalueProperty().addListener((obs, oldVal, newVal) -> ShiftText());
@@ -159,6 +172,7 @@ public class Controller {
             Send2Log("[Run] Success");
             RunSuccessFlag = true;
             UpdateRegisterTable();
+            UpdateMemoryTable();
         }
         ShowLineNums();
     }
@@ -181,6 +195,7 @@ public class Controller {
         } else {
             StepNum++;
             UpdateRegisterTable();
+            UpdateMemoryTable();
         }
         ShowLineNums();
     }
@@ -188,12 +203,14 @@ public class Controller {
     @FXML
     public void ResetSystem() {
         CS.InputCommand("HLT");
+        StepNum = 0;
         ErrorLine = 0;
         ErrorFlag = false;
         RunSuccessFlag = false;
         Send2Log("[Reset] Done");
         ShowLineNums();
         UpdateRegisterTable();
+        UpdateMemoryTable();
     }
 
     @FXML
@@ -257,6 +274,14 @@ public class Controller {
         UIRegisterTable.setItems(RegisterTableList);
     }
 
+    private void UpdateMemoryTable() {
+        MemoryTableList.clear();
+        for (int i = 0; i < 2048; i++) {
+            MemoryTableList.add(new MemoryTableLine(i, MS.getMemoryValue(i)));
+        }
+        UIMemoryTable.setItems(MemoryTableList);
+    }
+
     public void setStage(Stage _mStage) {
         mStage = _mStage;
     }
@@ -268,5 +293,10 @@ public class Controller {
     public void setRS(RegisterSystem _RS) {
         RS = _RS;
         UpdateRegisterTable();
+    }
+
+    public void setMS(MemorySystem _MS) {
+        MS = _MS;
+        UpdateMemoryTable();
     }
 }
