@@ -13,7 +13,7 @@ public class Main extends Application {
         Parent root = loader.load();
         final Controller C = loader.getController();
         primaryStage.setTitle("8080");
-        primaryStage.setScene(new Scene(root, 900, 700));
+        primaryStage.setScene(new Scene(root, 1150, 750));
         primaryStage.show();
 
         RegisterSystem RS = new RegisterSystem();

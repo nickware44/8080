@@ -1,0 +1,53 @@
+.text-area {
+	-fx-text-fill: #F3F3F3;
+    -fx-display-caret: true;
+}
+
+.text-area .content {
+	-fx-background-color: #1F2931;
+}
+
+.menu {
+    -fx-background-color: #333;
+}
+
+.menu:hover, .menu:showing {
+    -fx-background-color: #444;
+}
+
+.menu .label {
+    -fx-text-fill: #F3F3F3;
+}
+
+.menu-item {
+    -fx-background-color: #333;
+}
+
+.menu-item:focused {
+    -fx-background-color: #444;
+    -fx-text-fill: white;
+}
+
+.context-menu {
+    -fx-background-color: #333;
+}
+
+.scroll-pane > .viewport {
+   -fx-background-color:  #14222f;
+}
+
+.scroll-pane {
+   -fx-background-color:  #14222f;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 0.1em 0 0.1em;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+   -fx-background-color: #FF6F00;
+}
+
+.split-pane:vertical > .split-pane-divider {
+   -fx-background-color: #171717;
+}

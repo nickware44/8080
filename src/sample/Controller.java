@@ -7,14 +7,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileReader;
@@ -26,7 +25,7 @@ public class Controller {
     private ObservableList<RegisterTableLine> RegisterTableList = FXCollections.observableArrayList();
 
     @FXML
-    Pane UICodePanel;
+    ScrollPane UICodePanel;
 
     @FXML
     TextArea UICodeArea;
@@ -48,6 +47,9 @@ public class Controller {
     private CommandSystem CS;
     private RegisterSystem RS;
     private String ActiveDataFileName;
+    private boolean RunSuccessFlag;
+    private boolean ErrorFlag;
+    private int ErrorLine;
 
     public void initialize() {
         StepNum = 0;
@@ -55,19 +57,16 @@ public class Controller {
         ShowLineNums();
         UIRegisterTableNameColumn.setCellValueFactory(new PropertyValueFactory<>("registerName"));
         UIRegisterTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+
+        UICodeArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> ShiftLineNums());
+        UICodePanel.vvalueProperty().addListener((obs, oldVal, newVal) -> ShiftText());
     }
 
     @FXML
     public void onCodeTextChange() {
-        UICodeArea.selectPositionCaret(UICodeArea.getLength());
-        UICodeArea.deselect();
-        ShowLineNums();
-
-    }
-
-    @FXML
-    public void onCodeTextScroll() {
-        //System.out.println("~~");
+        ErrorLine = 0;
+        ErrorFlag = false;
+        RunSuccessFlag = false;
         ShowLineNums();
     }
 
@@ -75,6 +74,9 @@ public class Controller {
     public void FileNew() {
         ActiveDataFileName = "";
         UICodeArea.clear();
+        ErrorLine = 0;
+        ErrorFlag = false;
+        RunSuccessFlag = false;
         ShowLineNums();
     }
 
@@ -124,7 +126,7 @@ public class Controller {
     public void FileSaveAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file as...");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("8080 emulator files (*.8080", "*.8080");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("8080 emulator files (*.8080)", "*.8080");
         fileChooser.getExtensionFilters().add(extFilter);
         File file = fileChooser.showSaveDialog(mStage);
 
@@ -142,40 +144,55 @@ public class Controller {
     @FXML
     public void RunCodeFull() {
         ResetSystem();
-        boolean ErrFlag = false;
         String CurrentLine;
         for (int i = 0; i < getCodeAreaLineCount(); i++) {
+            //CurrentLine = StringUtils.split(UICodeArea.getText(), "\n")[i];
             CurrentLine = UICodeArea.getText().split("\n").clone()[i];
             if (!CurrentLine.equals("") && CS.InputCommand(CurrentLine) == -1) {
                 Send2Log("[Run] Error on line "+(i+1));
-                ErrFlag = true;
+                ErrorFlag = true;
+                ErrorLine = i + 1;
                 break;
             }
         }
-
-        if (!ErrFlag) {
+        if (!ErrorFlag) {
             Send2Log("[Run] Success");
+            RunSuccessFlag = true;
             UpdateRegisterTable();
         }
+        ShowLineNums();
     }
 
     @FXML
     public void RunCodeStep() {
-        if (StepNum >= getCodeAreaLineCount()) StepNum = 0;
+        if (StepNum >= getCodeAreaLineCount()) {
+            RunSuccessFlag = true;
+            StepNum = 0;
+            ShowLineNums();
+            return;
+        }
         if (StepNum == 0) ResetSystem();
         String CurrentLine = UICodeArea.getText().split("\n").clone()[StepNum];
         if (!CurrentLine.equals("") && CS.InputCommand(CurrentLine) == -1) {
             Send2Log("[Run step] Error on line "+(StepNum+1));
+            ErrorFlag = true;
+            ErrorLine = StepNum + 1;
+            StepNum = 0;
         } else {
             StepNum++;
             UpdateRegisterTable();
         }
+        ShowLineNums();
     }
 
     @FXML
     public void ResetSystem() {
         CS.InputCommand("HLT");
-        StepNum = 0;
+        ErrorLine = 0;
+        ErrorFlag = false;
+        RunSuccessFlag = false;
+        Send2Log("[Reset] Done");
+        ShowLineNums();
         UpdateRegisterTable();
     }
 
@@ -191,25 +208,40 @@ public class Controller {
     }
 
     private int getCodeAreaLineCount() {
-        return UICodeArea.getText().split("\n").length;
+        return StringUtils.countMatches(UICodeArea.getText(), "\n") + 1;
     }
 
     private void ShowLineNums() {
-        UICodePanel.getChildren().clear();
-        if (UICodeArea.getScrollTop() != 0) {
-            //UICodeArea.appendText("");
-            //UICodeArea.deletePreviousChar();
-        }
-        //System.out.println(UICodeArea.getScrollTop());
+        VBox root = new VBox();
         for (Integer i = 1; i < getCodeAreaLineCount()+1; i++) {
             Label L = new Label();
             L.setText(i.toString());
             L.setLayoutX(5);
-            L.setLayoutY(((i-1)*16+5)-UICodeArea.getScrollTop());
-            L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
-            UICodePanel.getChildren().add(L);
-        }
+            L.setLayoutY(((i-1)*17+5)-UICodeArea.getScrollTop());
 
+            if (!ErrorFlag) {
+                if (i < StepNum || RunSuccessFlag) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #4BC44D;");
+                else if (i == StepNum) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #009BFF;");
+                else L.setStyle("-fx-font-size: 12px; -fx-text-fill: #FFF;");
+            } else {
+                if (i == ErrorLine) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #F72C2C;");
+                else if (i < ErrorLine) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #4BC44D;");
+                else L.setStyle("-fx-font-size: 12px; -fx-text-fill: #FFF;");
+            }
+
+            root.getChildren().add(L);
+            UICodePanel.setContent(root);
+        }
+        ShiftLineNums();
+    }
+
+    private void ShiftLineNums() {
+        if (getCodeAreaLineCount() > 1) UICodePanel.setVvalue(((ScrollPane)UICodeArea.getChildrenUnmodifiable().get(0)).getVvalue());
+
+    }
+
+    private void ShiftText() {
+        if (getCodeAreaLineCount() > 1) ((ScrollPane)UICodeArea.getChildrenUnmodifiable().get(0)).setVvalue(UICodePanel.getVvalue());
     }
 
     private void UpdateRegisterTable() {
