@@ -63,9 +63,9 @@ public class Command {
 
     private int Str2Byte(String Str) {
         int B = 0;
-        for (int i = 0; i < OperandCap; i++) {
+        for (int i = 0; i < Str.length()/2; i++) {
             for (int j = 0; j < 2; j++) {
-                char Current = Str.charAt(i*OperandCap+j);
+                char Current = Str.charAt(i*Str.length()/2+j);
                 if (Current >= 'A' && Current <= 'F') {
                     B += ((Current-55)*(int)Math.pow(16, 1-j));
                 } else if (Current >= '0' && Current <= '9') {
@@ -77,7 +77,11 @@ public class Command {
         return B;
     }
 
-    public String getCommandByte() {
+    public String getCommandByteStr() {
         return Byte;
+    }
+
+    public short getCommandByte() {
+        return (short)Str2Byte(Byte);
     }
 }

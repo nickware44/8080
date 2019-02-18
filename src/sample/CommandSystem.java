@@ -6,8 +6,9 @@ import java.util.List;
 public class CommandSystem {
     private ArrayList<Command> Commands = new ArrayList<>();
     private RegisterSystem RS;
+    private MemorySystem MS;
 
-    CommandSystem(RegisterSystem _RS) {
+    CommandSystem(RegisterSystem _RS, MemorySystem _MS) {
         Commands.add(new Command("87", "ADD A"));
         Commands.add(new Command("80", "ADD B"));
         Commands.add(new Command("81", "ADD C"));
@@ -92,6 +93,7 @@ public class CommandSystem {
         Commands.add(new Command("76", "HLT"));
 
         RS = _RS;
+        MS = _MS;
     }
 
     public int InputCommand(String Comm) {
@@ -99,7 +101,10 @@ public class CommandSystem {
         for (int i = 0; i < Commands.size(); i++) {
             Command C = Commands.get(i);
             if ((Operands = C.Compare(Comm)) != null) {
-                DoAction(C.getCommandByte(), Operands);
+                MS.setMemoryValueNext(C.getCommandByte());
+                System.out.println(C.getCommandByteStr()+"~"+C.getCommandByte());
+                for (int j = 0; j < Operands.size(); j++) MS.setMemoryValueNext(Operands.get(j).shortValue());
+                DoAction(C.getCommandByteStr(), Operands);
                 return i;
             }
         }
@@ -142,6 +147,7 @@ public class CommandSystem {
 
             case "76":
                 RS.ResetRegisters();
+                MS.ResetMemory();
                 break;
         }
     }

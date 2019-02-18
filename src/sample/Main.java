@@ -18,7 +18,7 @@ public class Main extends Application {
 
         RegisterSystem RS = new RegisterSystem();
         MemorySystem MS = new MemorySystem();
-        CommandSystem CS = new CommandSystem(RS);
+        CommandSystem CS = new CommandSystem(RS, MS);
 
         C.setStage(primaryStage);
         C.setCS(CS);

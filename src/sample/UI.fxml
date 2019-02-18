@@ -53,28 +53,57 @@
                   </GridPane>
               </items>
             </SplitPane>
-            <SplitPane dividerPositions="0.29959514170040485" maxWidth="300.0" minWidth="100.0" orientation="VERTICAL" prefHeight="490.0" prefWidth="160.0">
-              <items>
-                   <TableView fx:id="UIRegisterTable" prefHeight="288.0" prefWidth="250.0">
-                       <columns>
-                           <TableColumn fx:id="UIRegisterTableNameColumn" prefWidth="75.0" text="Register" />
-                           <TableColumn fx:id="UIRegisterTableValueColumn" prefWidth="75.0" text="Value" />
-                       </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                   </TableView>
-                   <TableView fx:id="UIMemoryTable" prefHeight="205.0" prefWidth="158.0">
-                       <columns>
-                           <TableColumn fx:id="UIMemoryTableAddressColumn" prefWidth="75.0" text="Memory address" />
-                           <TableColumn fx:id="UIMemoryTableValueColumn" prefWidth="75.0" text="Value" />
-                       </columns>
-                     <columnResizePolicy>
-                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                     </columnResizePolicy>
-                   </TableView>
-              </items>
-            </SplitPane>
+            <TabPane maxWidth="300.0" minWidth="100.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Common">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="712.0" prefWidth="206.0">
+                           <children>
+                              <SplitPane dividerPositions="0.6422535211267606" maxWidth="300.0" minWidth="100.0" orientation="VERTICAL" prefHeight="711.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <items>
+                                     <TableView fx:id="UIRegisterTable" prefHeight="288.0" prefWidth="250.0">
+                                         <columns>
+                                             <TableColumn fx:id="UIRegisterTableNameColumn" prefWidth="75.0" text="Register" />
+                                             <TableColumn fx:id="UIRegisterTableValueColumn" prefWidth="75.0" text="Value" />
+                                         </columns>
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                     </TableView>
+                                    <TableView fx:id="UIIOTable" prefHeight="288.0" prefWidth="250.0">
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                       <columns>
+                                          <TableColumn fx:id="UIRegisterTableNameColumn1" prefWidth="75.0" text="Port" />
+                                          <TableColumn fx:id="UIRegisterTableValueColumn1" prefWidth="75.0" text="Value" />
+                                       </columns>
+                                    </TableView>
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Memory">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                               <TableView fx:id="UIMemoryTable" prefHeight="592.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                   <columns>
+                                       <TableColumn fx:id="UIMemoryTableAddressColumn" prefWidth="75.0" text="Memory address" />
+                                       <TableColumn fx:id="UIMemoryTableValueColumn" prefWidth="75.0" text="Value" />
+                                   </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                               </TableView>
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </Tab>
+              </tabs>
+            </TabPane>
         </items>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

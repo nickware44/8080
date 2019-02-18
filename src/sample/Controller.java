@@ -7,6 +7,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
@@ -233,17 +234,18 @@ public class Controller {
         for (Integer i = 1; i < getCodeAreaLineCount()+1; i++) {
             Label L = new Label();
             L.setText(i.toString());
-            L.setLayoutX(5);
-            L.setLayoutY(((i-1)*17+5)-UICodeArea.getScrollTop());
+            if (i == 1) L.paddingProperty().setValue(new Insets(4.5,0,0,10));
+            else if (i == getCodeAreaLineCount()) L.paddingProperty().setValue(new Insets(0.2,0,3,10));
+            else L.paddingProperty().setValue(new Insets(0.2,0,0,10));
 
             if (!ErrorFlag) {
-                if (i < StepNum || RunSuccessFlag) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #4BC44D;");
-                else if (i == StepNum) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #009BFF;");
-                else L.setStyle("-fx-font-size: 12px; -fx-text-fill: #FFF;");
+                if (i < StepNum || RunSuccessFlag) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #4BC44D;");
+                else if (i == StepNum) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #009BFF;");
+                else L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
             } else {
-                if (i == ErrorLine) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #F72C2C;");
-                else if (i < ErrorLine) L.setStyle("-fx-font-size: 12px; -fx-text-fill: #4BC44D;");
-                else L.setStyle("-fx-font-size: 12px; -fx-text-fill: #FFF;");
+                if (i == ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #F72C2C;");
+                else if (i < ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #4BC44D;");
+                else L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
             }
 
             root.getChildren().add(L);
