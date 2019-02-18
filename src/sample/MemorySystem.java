@@ -1,12 +1,11 @@
 package sample;
 
 public class MemorySystem {
-    private short Memory[];
+    private short [] Memory;
     private int Iterator;
 
     MemorySystem() {
-        Memory = new short[65536];
-        Iterator = 0;
+        ResetMemory();
     }
 
     public void ResetMemory() {
@@ -29,5 +28,15 @@ public class MemorySystem {
 
     public short getMemoryValue(int Address) {
         return Memory[Address];
+    }
+
+    public short getMemoryValueLast() {
+        if (Iterator == 0) Iterator++;
+        Iterator++;
+        return Memory[Iterator-2];
+    }
+
+    public int getIterator() {
+        return Iterator;
     }
 }

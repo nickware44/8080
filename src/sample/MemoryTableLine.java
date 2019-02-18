@@ -1,5 +1,7 @@
 package sample;
 
+import org.jetbrains.annotations.Contract;
+
 public class MemoryTableLine {
     private int memoryAddress;
     private short value;
@@ -9,7 +11,8 @@ public class MemoryTableLine {
         value = _value;
     }
 
-    private String toHEX(int I, int Cap) {
+    @Contract(pure = true)
+    public static String toHEX(int I, int Cap) {
         String ValueStr = "";
         do {
             if (I%16 >= 10) ValueStr = (char)(I%16+55) + ValueStr;

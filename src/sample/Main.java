@@ -12,7 +12,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("UI.fxml"));
         Parent root = loader.load();
         final Controller C = loader.getController();
-        primaryStage.setTitle("8080");
+        primaryStage.setTitle("8080: microprocessor emulator");
         primaryStage.setScene(new Scene(root, 1150, 750));
         primaryStage.show();
 

@@ -7,6 +7,7 @@ public class CommandSystem {
     private ArrayList<Command> Commands = new ArrayList<>();
     private RegisterSystem RS;
     private MemorySystem MS;
+    private int CommandCounter;
 
     CommandSystem(RegisterSystem _RS, MemorySystem _MS) {
         Commands.add(new Command("87", "ADD A"));
@@ -94,6 +95,8 @@ public class CommandSystem {
 
         RS = _RS;
         MS = _MS;
+
+        CommandCounter = 0;
     }
 
     public int InputCommand(String Comm) {
@@ -102,53 +105,68 @@ public class CommandSystem {
             Command C = Commands.get(i);
             if ((Operands = C.Compare(Comm)) != null) {
                 MS.setMemoryValueNext(C.getCommandByte());
-                System.out.println(C.getCommandByteStr()+"~"+C.getCommandByte());
+                //System.out.println(C.getCommandByteStr()+"~"+C.getCommandByte());
                 for (int j = 0; j < Operands.size(); j++) MS.setMemoryValueNext(Operands.get(j).shortValue());
-                DoAction(C.getCommandByteStr(), Operands);
-                return i;
+                //DoAction(C.getCommandByteStr(), Operands);
+                CommandCounter++;
+                return -1;
             }
         }
-        return -1;
+        return MS.getIterator();
     }
 
-    private void DoAction(String CommandByte, List<Integer> Operands) {
+    public void ExecuteCommands() {
+        MS.ResetIterator();
+        for (int i = 0; i < CommandCounter; i++) DoAction(MS.getMemoryValueLast());
+    }
+
+    public void ExecuteNextCommand() {
+        DoAction(MS.getMemoryValueLast());
+    }
+
+    private void DoAction(short CommandByte) {
         switch (CommandByte) {
-            case "87":
+            case 0x87:
                 RS.setRegisterA((short)(2*RS.getRegisterA()));
                 break;
-            case "80":
+            case 0x80:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterB()));
                 break;
-            case "81":
+            case 0x81:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterC()));
                 break;
-            case "82":
+            case 0x82:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterD()));
                 break;
-            case "83":
+            case 0x83:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterE()));
                 break;
-            case "84":
+            case 0x84:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterH()));
                 break;
-            case "85":
+            case 0x85:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterL()));
                 break;
-            case "86":
+            case 0x86:
                 RS.setRegisterA((short)(RS.getRegisterA()+RS.getRegisterL()));
                 break;
-            case "C6":
-                RS.setRegisterA((short)(RS.getRegisterA()+Operands.get(0)));
+            case 0xC6:
+                RS.setRegisterA((short)(RS.getRegisterA()+MS.getMemoryValueLast()));
                 break;
 
-            case "3E":
-                RS.setRegisterA(Operands.get(0).shortValue());
+            case 0x3E:
+                RS.setRegisterA(MS.getMemoryValueLast());
                 break;
 
-            case "76":
+            case 0x76:
                 RS.ResetRegisters();
                 MS.ResetMemory();
+                ResetCommandCounter();
                 break;
         }
+    }
+
+    public void ResetCommandCounter() {
+        CommandCounter = 0;
     }
 }

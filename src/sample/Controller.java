@@ -62,6 +62,7 @@ public class Controller {
     private boolean RunSuccessFlag;
     private boolean ErrorFlag;
     private int ErrorLine;
+    private int ErrorAddress;
 
     public void initialize() {
         StepNum = 0;
@@ -78,9 +79,10 @@ public class Controller {
 
     @FXML
     public void onCodeTextChange() {
-        ErrorLine = 0;
+        ErrorLine = -1;
         ErrorFlag = false;
         RunSuccessFlag = false;
+        StepNum = 0;
         ShowLineNums();
     }
 
@@ -88,7 +90,7 @@ public class Controller {
     public void FileNew() {
         ActiveDataFileName = "";
         UICodeArea.clear();
-        ErrorLine = 0;
+        ErrorLine = -1;
         ErrorFlag = false;
         RunSuccessFlag = false;
         ShowLineNums();
@@ -155,21 +157,13 @@ public class Controller {
         Platform.exit();
     }
 
+
     @FXML
     public void RunCodeFull() {
         ResetSystem();
-        String CurrentLine;
-        for (int i = 0; i < getCodeAreaLineCount(); i++) {
-            //CurrentLine = StringUtils.split(UICodeArea.getText(), "\n")[i];
-            CurrentLine = UICodeArea.getText().split("\n").clone()[i];
-            if (!CurrentLine.equals("") && CS.InputCommand(CurrentLine) == -1) {
-                Send2Log("[Run] Error on line "+(i+1));
-                ErrorFlag = true;
-                ErrorLine = i + 1;
-                break;
-            }
-        }
-        if (!ErrorFlag) {
+        Load2Memory();
+        if (ErrorLine == -1) {
+            CS.ExecuteCommands();
             Send2Log("[Run] Success");
             RunSuccessFlag = true;
             UpdateRegisterTable();
@@ -182,30 +176,34 @@ public class Controller {
     public void RunCodeStep() {
         if (StepNum >= getCodeAreaLineCount()) {
             RunSuccessFlag = true;
+            Send2Log("[Run step] Success");
             StepNum = 0;
             ShowLineNums();
             return;
         }
-        if (StepNum == 0) ResetSystem();
-        String CurrentLine = UICodeArea.getText().split("\n").clone()[StepNum];
-        if (!CurrentLine.equals("") && CS.InputCommand(CurrentLine) == -1) {
-            Send2Log("[Run step] Error on line "+(StepNum+1));
-            ErrorFlag = true;
-            ErrorLine = StepNum + 1;
-            StepNum = 0;
-        } else {
-            StepNum++;
-            UpdateRegisterTable();
-            UpdateMemoryTable();
+        if (StepNum == 0) {
+            ResetSystem();
+            Load2Memory();
+            if (ErrorLine != -1) {
+                ShowLineNums();
+                return;
+            }
         }
+
+        CS.ExecuteNextCommand();
+        StepNum++;
+        UpdateRegisterTable();
+        UpdateMemoryTable();
+
         ShowLineNums();
     }
 
     @FXML
     public void ResetSystem() {
         CS.InputCommand("HLT");
+        CS.ExecuteNextCommand();
         StepNum = 0;
-        ErrorLine = 0;
+        ErrorLine = -1;
         ErrorFlag = false;
         RunSuccessFlag = false;
         Send2Log("[Reset] Done");
@@ -217,6 +215,22 @@ public class Controller {
     @FXML
     public void ClearLog() {
         UILogArea.clear();
+    }
+
+    private void Load2Memory() {
+        String CurrentLine;
+        for (int i = 0; i < getCodeAreaLineCount(); i++) {
+            CurrentLine = UICodeArea.getText().split("\n").clone()[i];
+            if (!CurrentLine.equals("") && (ErrorAddress = CS.InputCommand(CurrentLine)) != -1) {
+                ErrorFlag = false;
+                ErrorLine = i + 1;
+                Send2Log("[Loader] Error loading command from line "+(ErrorLine)+" to memory address 0x"+MemoryTableLine.toHEX(ErrorAddress, 4));
+                UpdateMemoryTable();
+                return;
+            }
+        }
+        Send2Log("[Loader] Success");
+        MS.ResetIterator();
     }
 
     private void Send2Log(String Msg) {
@@ -238,15 +252,12 @@ public class Controller {
             else if (i == getCodeAreaLineCount()) L.paddingProperty().setValue(new Insets(0.2,0,3,10));
             else L.paddingProperty().setValue(new Insets(0.2,0,0,10));
 
-            if (!ErrorFlag) {
-                if (i < StepNum || RunSuccessFlag) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #4BC44D;");
-                else if (i == StepNum) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #009BFF;");
-                else L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
-            } else {
-                if (i == ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #F72C2C;");
-                else if (i < ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #4BC44D;");
-                else L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
-            }
+            if (i < StepNum || RunSuccessFlag || (i < ErrorLine && ErrorFlag)) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #4BC44D;");
+            else if (i == StepNum) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #009BFF;");
+            else L.setStyle("-fx-font-size: 11px; -fx-text-fill: #FFF;");
+
+            if (i == ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #F72C2C;");
+
 
             root.getChildren().add(L);
             UICodePanel.setContent(root);
