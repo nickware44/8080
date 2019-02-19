@@ -25,6 +25,7 @@ import java.util.Date;
 public class Controller {
     private ObservableList<RegisterTableLine> RegisterTableList = FXCollections.observableArrayList();
     private ObservableList<MemoryTableLine> MemoryTableList = FXCollections.observableArrayList();
+    private ObservableList<PortTableLine> PortTableList = FXCollections.observableArrayList();
 
     @FXML
     ScrollPane UICodePanel;
@@ -53,11 +54,21 @@ public class Controller {
     @FXML
     TableColumn<MemoryTableLine, String> UIMemoryTableValueColumn;
 
+    @FXML
+    TableView UIPortTable;
+
+    @FXML
+    TableColumn<MemoryTableLine, String> UIPortTableNumColumn;
+
+    @FXML
+    TableColumn<MemoryTableLine, String> UIPortTableValueColumn;
+
     private Stage mStage;
     private int StepNum;
     private CommandSystem CS;
     private RegisterSystem RS;
     private MemorySystem MS;
+    private PortSystem PS;
     private String ActiveDataFileName;
     private boolean RunSuccessFlag;
     private boolean ErrorFlag;
@@ -72,6 +83,8 @@ public class Controller {
         UIRegisterTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
         UIMemoryTableAddressColumn.setCellValueFactory(new PropertyValueFactory<>("memoryAddress"));
         UIMemoryTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        UIPortTableNumColumn.setCellValueFactory(new PropertyValueFactory<>("portNum"));
+        UIPortTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
 
         UICodeArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> ShiftLineNums());
         UICodePanel.vvalueProperty().addListener((obs, oldVal, newVal) -> ShiftText());
@@ -168,6 +181,7 @@ public class Controller {
             RunSuccessFlag = true;
             UpdateRegisterTable();
             UpdateMemoryTable();
+            UpdatePortTable();
         }
         ShowLineNums();
     }
@@ -194,6 +208,7 @@ public class Controller {
         StepNum++;
         UpdateRegisterTable();
         UpdateMemoryTable();
+        UpdatePortTable();
 
         ShowLineNums();
     }
@@ -210,6 +225,7 @@ public class Controller {
         ShowLineNums();
         UpdateRegisterTable();
         UpdateMemoryTable();
+        UpdatePortTable();
     }
 
     @FXML
@@ -258,7 +274,6 @@ public class Controller {
 
             if (i == ErrorLine) L.setStyle("-fx-font-size: 11px; -fx-text-fill: #F72C2C;");
 
-
             root.getChildren().add(L);
             UICodePanel.setContent(root);
         }
@@ -295,6 +310,14 @@ public class Controller {
         UIMemoryTable.setItems(MemoryTableList);
     }
 
+    private void UpdatePortTable() {
+        PortTableList.clear();
+        for (short i = 0; i < 3; i++) {
+            PortTableList.add(new PortTableLine(i, PS.ReadPort(i)));
+        }
+        UIPortTable.setItems(PortTableList);
+    }
+
     public void setStage(Stage _mStage) {
         mStage = _mStage;
     }
@@ -311,5 +334,10 @@ public class Controller {
     public void setMS(MemorySystem _MS) {
         MS = _MS;
         UpdateMemoryTable();
+    }
+
+    public void setPS(PortSystem _PS) {
+        PS = _PS;
+        UpdatePortTable();
     }
 }

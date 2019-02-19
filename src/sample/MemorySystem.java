@@ -39,4 +39,12 @@ public class MemorySystem {
     public int getIterator() {
         return Iterator;
     }
+
+    public void setMemory(short[] _Memory) {
+        Memory = _Memory;
+    }
+
+    public short [] getMemory() {
+        return Memory;
+    }
 }

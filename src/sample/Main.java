@@ -18,12 +18,14 @@ public class Main extends Application {
 
         RegisterSystem RS = new RegisterSystem();
         MemorySystem MS = new MemorySystem();
-        CommandSystem CS = new CommandSystem(RS, MS);
+        PortSystem PS = new PortSystem();
+        CommandSystem CS = new CommandSystem(RS, MS, PS);
 
         C.setStage(primaryStage);
         C.setCS(CS);
         C.setRS(RS);
         C.setMS(MS);
+        C.setPS(PS);
     }
 
     public static void main(String[] args) {

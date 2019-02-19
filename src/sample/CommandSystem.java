@@ -7,9 +7,10 @@ public class CommandSystem {
     private ArrayList<Command> Commands = new ArrayList<>();
     private RegisterSystem RS;
     private MemorySystem MS;
+    private PortSystem PS;
     private int CommandCounter;
 
-    CommandSystem(RegisterSystem _RS, MemorySystem _MS) {
+    CommandSystem(RegisterSystem _RS, MemorySystem _MS, PortSystem _PS) {
         Commands.add(new Command("87", "ADD A"));
         Commands.add(new Command("80", "ADD B"));
         Commands.add(new Command("81", "ADD C"));
@@ -95,6 +96,7 @@ public class CommandSystem {
 
         RS = _RS;
         MS = _MS;
+        PS = _PS;
 
         CommandCounter = 0;
     }
@@ -158,9 +160,18 @@ public class CommandSystem {
                 RS.setRegisterA(MS.getMemoryValueLast());
                 break;
 
+            case 0xDB:
+                RS.setRegisterA(PS.ReadPort(MS.getMemoryValueLast()));
+                break;
+
+            case 0xD3:
+                PS.WritePort(MS.getMemoryValueLast(), RS.getRegisterA());
+                break;
+
             case 0x76:
                 RS.ResetRegisters();
                 MS.ResetMemory();
+                PS.ResetPorts();
                 ResetCommandCounter();
                 break;
         }
