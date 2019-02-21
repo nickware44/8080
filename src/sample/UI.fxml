@@ -117,6 +117,10 @@
                        <MenuItem mnemonicParsing="false" onAction="#FileOpen" text="Open" />
                        <MenuItem mnemonicParsing="false" onAction="#FileSave" text="Save" />
                        <MenuItem mnemonicParsing="false" onAction="#FileSaveAs" text="Save As" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#DumpMemory" text="Dump memory to file" />
+                  <MenuItem mnemonicParsing="false" onAction="#LoadMemory" text="Load memory dump from file" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                        <MenuItem mnemonicParsing="false" onAction="#Close" text="Close" />
                    </items>
                </Menu>
@@ -137,6 +141,9 @@
                         <KeyCodeCombination alt="ANY" code="F7" control="UP" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#RunFMemory" text="Run from memory" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                        <MenuItem mnemonicParsing="false" onAction="#ClearLog" text="Clear log" />
                    </items>
                </Menu>

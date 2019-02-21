@@ -16,9 +16,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -145,7 +143,6 @@ public class Controller {
             FW.write(UICodeArea.getText());
             FW.close();
             Send2Log("[Save to file] Saved to file: "+ActiveDataFileName);
-
         } catch (java.io.IOException ex) {
             Send2Log("[Save to file] Error saving to file "+ActiveDataFileName);
         }
@@ -162,6 +159,50 @@ public class Controller {
         if (file != null) {
             ActiveDataFileName = file.getAbsolutePath() + ".8080";
             FileSave();
+        }
+    }
+
+    @FXML
+    public void DumpMemory() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Dump memory to file");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All files", "*.*");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showSaveDialog(mStage);
+        try {
+            FileWriter fstream = new FileWriter(file);
+            BufferedWriter out = new BufferedWriter(fstream);
+            out.write(CS.getCommandCounter());
+            for (int i = 0; i < MS.getMemory().length; i++) {
+                out.write(MS.getMemory()[i]);
+            }
+            out.flush();
+            out.close();
+            Send2Log("[Memory] Dump success");
+        } catch (java.io.IOException ex) {
+            Send2Log("[Memory] Unable to dump memory to file "+ActiveDataFileName);
+        }
+    }
+
+    @FXML
+    public void LoadMemory() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Load memory dump from file");
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("All files", "*.*");
+        fileChooser.getExtensionFilters().add(extFilter);
+        File file = fileChooser.showOpenDialog(mStage);
+        try {
+            FileReader fstream = new FileReader(file);
+            BufferedReader in = new BufferedReader(fstream);
+            CS.setCommandCounter(in.read());
+            for (int i = 0; i < MS.getMemory().length; i++) {
+                MS.getMemory()[i] = (short)in.read();
+            }
+            in.close();
+            Send2Log("[Memory] Load success");
+            UpdateMemoryTable();
+        } catch (java.io.IOException ex) {
+            Send2Log("[Memory] Unable to load memory dump from file "+ActiveDataFileName);
         }
     }
 
@@ -226,6 +267,18 @@ public class Controller {
         UpdateRegisterTable();
         UpdateMemoryTable();
         UpdatePortTable();
+    }
+
+    @FXML
+    public void RunFMemory() {
+        CS.ExecuteCommands();
+        if (ErrorAddress != -1 && ErrorFlag) Send2Log("[Run from memory] Error running command from memory address 0x"+MemoryTableLine.toHEX(ErrorAddress, 4));
+        else {
+            Send2Log("[Run from memory] Success");
+            UpdateRegisterTable();
+            UpdateMemoryTable();
+            UpdatePortTable();
+        }
     }
 
     @FXML

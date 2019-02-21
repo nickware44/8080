@@ -180,4 +180,12 @@ public class CommandSystem {
     public void ResetCommandCounter() {
         CommandCounter = 0;
     }
+
+    public void setCommandCounter(int _CommandCounter) {
+        CommandCounter = _CommandCounter;
+    }
+
+    public int getCommandCounter() {
+        return CommandCounter;
+    }
 }

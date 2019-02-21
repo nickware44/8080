@@ -1,7 +1,5 @@
 package sample;
 
-import org.jetbrains.annotations.Contract;
-
 public class MemoryTableLine {
     private int memoryAddress;
     private short value;
@@ -11,7 +9,6 @@ public class MemoryTableLine {
         value = _value;
     }
 
-    @Contract(pure = true)
     public static String toHEX(int I, int Cap) {
         String ValueStr = "";
         do {
