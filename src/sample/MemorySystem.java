@@ -18,11 +18,11 @@ public class MemorySystem {
     }
 
     public void setMemoryValue(int Address, short Value) {
-        Memory[Address] = Value;
+        Memory[Address] = (short)Math.abs(Value&0xFF);
     }
 
     public void setMemoryValueNext(short Value) {
-        Memory[Iterator] = Value;
+        Memory[Iterator] = (short)Math.abs(Value&0xFF);
         Iterator++;
     }
 

@@ -18,30 +18,9 @@ public class CommandSystem {
         Commands.add(new Command("83", "ADD E"));
         Commands.add(new Command("84", "ADD H"));
         Commands.add(new Command("85", "ADD L"));
-        Commands.add(new Command("86", "ADD M"));
         Commands.add(new Command("C6", "ADI", 1, 1));
 
         Commands.add(new Command("2F", "CMA"));
-
-        Commands.add(new Command("A7", "ANA A"));
-        Commands.add(new Command("A0", "ANA B"));
-        Commands.add(new Command("A1", "ANA C"));
-        Commands.add(new Command("A2", "ANA D"));
-        Commands.add(new Command("A3", "ANA E"));
-        Commands.add(new Command("A4", "ANA H"));
-        Commands.add(new Command("A5", "ANA L"));
-        Commands.add(new Command("A6", "ANA M"));
-        Commands.add(new Command("E6", "ANI", 1, 1));
-
-        Commands.add(new Command("BF", "CMP A"));
-        Commands.add(new Command("B8", "CMP B"));
-        Commands.add(new Command("B9", "CMP C"));
-        Commands.add(new Command("BA", "CMP D"));
-        Commands.add(new Command("BB", "CMP E"));
-        Commands.add(new Command("BC", "CMP H"));
-        Commands.add(new Command("BD", "CMP L"));
-        Commands.add(new Command("BE", "CMP M"));
-        Commands.add(new Command("FE", "CMI", 1, 1));
 
         Commands.add(new Command("3C", "INR A"));
         Commands.add(new Command("04", "INR B"));
@@ -50,7 +29,6 @@ public class CommandSystem {
         Commands.add(new Command("1C", "INR E"));
         Commands.add(new Command("24", "INR H"));
         Commands.add(new Command("2C", "INR L"));
-        Commands.add(new Command("34", "INR M"));
 
         Commands.add(new Command("3D", "DCR A"));
         Commands.add(new Command("05", "DCR B"));
@@ -59,16 +37,6 @@ public class CommandSystem {
         Commands.add(new Command("1D", "DCR E"));
         Commands.add(new Command("25", "DCR H"));
         Commands.add(new Command("2D", "DCR L"));
-        Commands.add(new Command("35", "DCR M"));
-
-        Commands.add(new Command("7F", "MOV A, A"));
-        Commands.add(new Command("78", "MOV A, B"));
-        Commands.add(new Command("79", "MOV A, C"));
-        Commands.add(new Command("7A", "MOV A, D"));
-        Commands.add(new Command("7B", "MOV A, E"));
-        Commands.add(new Command("7C", "MOV A, H"));
-        Commands.add(new Command("7D", "MOV A, L"));
-        Commands.add(new Command("7E", "MOV A, M"));
 
         Commands.add(new Command("3E", "MVI A,", 1, 1));
         Commands.add(new Command("06", "MVI B,", 1, 1));
@@ -77,7 +45,6 @@ public class CommandSystem {
         Commands.add(new Command("1E", "MVI E,", 1, 1));
         Commands.add(new Command("26", "MVI H,", 1, 1));
         Commands.add(new Command("2E", "MVI L,", 1, 1));
-        Commands.add(new Command("36", "MVI M,", 1, 1));
 
         Commands.add(new Command("97", "SUB A"));
         Commands.add(new Command("90", "SUB B"));
@@ -86,7 +53,6 @@ public class CommandSystem {
         Commands.add(new Command("93", "SUB E"));
         Commands.add(new Command("94", "SUB H"));
         Commands.add(new Command("95", "SUB L"));
-        Commands.add(new Command("96", "SUB M"));
         Commands.add(new Command("D6", "SUI", 1, 1));
 
         Commands.add(new Command("DB", "IN", 1, 1));
@@ -156,8 +122,98 @@ public class CommandSystem {
                 RS.setRegisterA((short)(RS.getRegisterA()+MS.getMemoryValueLast()));
                 break;
 
+            case 0x97:
+                RS.setRegisterA((short)(0));
+                break;
+            case 0x90:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterB()));
+                break;
+            case 0x91:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterC()));
+                break;
+            case 0x92:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterD()));
+                break;
+            case 0x93:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterE()));
+                break;
+            case 0x94:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterH()));
+                break;
+            case 0x95:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterL()));
+                break;
+            case 0x96:
+                RS.setRegisterA((short)(RS.getRegisterA()-RS.getRegisterL()));
+                break;
+            case 0xD6:
+                RS.setRegisterA((short)(RS.getRegisterA()-MS.getMemoryValueLast()));
+                break;
+
+            case 0x3C:
+                RS.setRegisterA((short)(RS.getRegisterA()+1));
+                break;
+            case 0x04:
+                RS.setRegisterB((short)(RS.getRegisterB()+1));
+                break;
+            case 0x0C:
+                RS.setRegisterC((short)(RS.getRegisterC()+1));
+                break;
+            case 0x14:
+                RS.setRegisterD((short)(RS.getRegisterD()+1));
+                break;
+            case 0x1C:
+                RS.setRegisterE((short)(RS.getRegisterE()+1));
+                break;
+            case 0x24:
+                RS.setRegisterH((short)(RS.getRegisterH()+1));
+                break;
+            case 0x2C:
+                RS.setRegisterL((short)(RS.getRegisterL()+1));
+                break;
+
+            case 0x3D:
+                RS.setRegisterA((short)(RS.getRegisterA()-1));
+                break;
+            case 0x05:
+                RS.setRegisterB((short)(RS.getRegisterB()-1));
+                break;
+            case 0x0D:
+                RS.setRegisterC((short)(RS.getRegisterC()-1));
+                break;
+            case 0x15:
+                RS.setRegisterD((short)(RS.getRegisterD()-1));
+                break;
+            case 0x1D:
+                RS.setRegisterE((short)(RS.getRegisterE()-1));
+                break;
+            case 0x25:
+                RS.setRegisterH((short)(RS.getRegisterH()-1));
+                break;
+            case 0x2D:
+                RS.setRegisterL((short)(RS.getRegisterL()+1));
+                break;
+
             case 0x3E:
                 RS.setRegisterA(MS.getMemoryValueLast());
+                break;
+            case 0x06:
+                RS.setRegisterB(MS.getMemoryValueLast());
+                break;
+            case 0x0E:
+                RS.setRegisterC(MS.getMemoryValueLast());
+                break;
+            case 0x16:
+                RS.setRegisterD(MS.getMemoryValueLast());
+                break;
+            case 0x1E:
+                RS.setRegisterE(MS.getMemoryValueLast());
+                break;
+            case 0x26:
+                RS.setRegisterH(MS.getMemoryValueLast());
+                break;
+            case 0x2E:
+                RS.setRegisterL(MS.getMemoryValueLast());
                 break;
 
             case 0xDB:
