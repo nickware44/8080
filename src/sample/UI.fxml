@@ -59,7 +59,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="712.0" prefWidth="206.0">
                            <children>
-                              <SplitPane dividerPositions="0.6422535211267606" maxWidth="300.0" minWidth="100.0" orientation="VERTICAL" prefHeight="711.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane dividerPositions="0.4450704225352113, 0.6647887323943662" maxWidth="300.0" minWidth="100.0" orientation="VERTICAL" prefHeight="711.0" prefWidth="250.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                 <items>
                                      <TableView fx:id="UIRegisterTable" prefHeight="288.0" prefWidth="250.0">
                                          <columns>
@@ -70,6 +70,15 @@
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                        </columnResizePolicy>
                                      </TableView>
+                                    <TableView fx:id="UIFlagTable" prefHeight="288.0" prefWidth="250.0">
+                                       <columnResizePolicy>
+                                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                       </columnResizePolicy>
+                                       <columns>
+                                          <TableColumn fx:id="UIFlagTableNameColumn" prefWidth="75.0" text="Flag" />
+                                          <TableColumn fx:id="UIFlagTableValueColumn" prefWidth="75.0" text="Value" />
+                                       </columns>
+                                    </TableView>
                                     <TableView fx:id="UIPortTable" prefHeight="288.0" prefWidth="250.0">
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
