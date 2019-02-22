@@ -1,74 +1,112 @@
 package sample;
 
 public class RegisterSystem {
-    private short [] Registers = new short[7];
+    private short [] CommonRegisters = new short[7];
+    private boolean [] FlagsRegister = new boolean[8];
+
+    RegisterSystem() {
+        ResetRegisters();
+    }
 
     public void setRegisterA(short Data) {
-        Registers[0] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[0] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterB(short Data) {
-        Registers[1] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[1] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterC(short Data) {
-        Registers[2] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[2] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterD(short Data) {
-        Registers[3] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[3] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterE(short Data) {
-        Registers[4] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[4] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterH(short Data) {
-        Registers[5] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[5] = (short)Math.abs(Data&0xFF);
     }
 
     public void setRegisterL(short Data) {
-        Registers[6] = (short)Math.abs(Data&0xFF);
+        CommonRegisters[6] = (short)Math.abs(Data&0xFF);
     }
 
     public short getRegisterA() {
-        return Registers[0];
+        return CommonRegisters[0];
     }
 
     public short getRegisterB() {
-        return Registers[1];
+        return CommonRegisters[1];
     }
 
     public short getRegisterC() {
-        return Registers[2];
+        return CommonRegisters[2];
     }
 
     public short getRegisterD() {
-        return Registers[3];
+        return CommonRegisters[3];
     }
 
     public short getRegisterE() {
-        return Registers[4];
+        return CommonRegisters[4];
     }
 
     public short getRegisterH() {
-        return Registers[5];
+        return CommonRegisters[5];
     }
 
     public short getRegisterL() {
-        return Registers[6];
+        return CommonRegisters[6];
     }
 
-    public short [] getRegisterM() {
-        short [] M = new short[2];
-        M[0] = Registers[5];
-        M[1] = Registers[6];
-        return M;
+    public void setCYFlag(boolean Value) {
+        FlagsRegister[0]= Value;
+    }
+
+    public void setPFlag(boolean Value) {
+        FlagsRegister[2]= Value;
+    }
+
+    public void setACFlag(boolean Value) {
+        FlagsRegister[4]= Value;
+    }
+
+    public void setZFlag(boolean Value) {
+        FlagsRegister[6]= Value;
+    }
+
+
+    public void setSFlag(boolean Value) {
+        FlagsRegister[7]= Value;
+    }
+
+    public boolean getCYFlag() {
+        return FlagsRegister[0];
+    }
+
+    public boolean getPFlag() {
+        return FlagsRegister[2];
+    }
+
+    public boolean getACFlag() {
+        return FlagsRegister[4];
+    }
+
+    public boolean getZFlag() {
+        return FlagsRegister[6];
+    }
+
+    public boolean getSFlag() {
+        return FlagsRegister[7];
     }
 
     public void ResetRegisters() {
-        for (int i = 0; i < 7; i++) {
-            Registers[i] = 0;
-        }
+        CommonRegisters = new short[7];
+        FlagsRegister = new boolean[8];
     }
 }
