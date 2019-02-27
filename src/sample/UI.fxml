@@ -76,7 +76,7 @@
                                        </columnResizePolicy>
                                        <columns>
                                           <TableColumn fx:id="UIFlagTableNameColumn" prefWidth="75.0" text="Flag" />
-                                          <TableColumn fx:id="UIFlagTableValueColumn" prefWidth="75.0" text="Value" />
+                                          <TableColumn fx:id="UIFlagTableStateColumn" prefWidth="75.0" text="Value" />
                                        </columns>
                                     </TableView>
                                     <TableView fx:id="UIPortTable" prefHeight="288.0" prefWidth="250.0">

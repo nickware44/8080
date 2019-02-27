@@ -36,6 +36,10 @@ public class MemorySystem {
         return Memory[Iterator-2];
     }
 
+    public void setIterator(int _Iterator) {
+        Iterator = _Iterator;
+    }
+
     public int getIterator() {
         return Iterator;
     }

@@ -38,6 +38,9 @@ public class CommandSystem {
         Commands.add(new Command("25", "DCR H"));
         Commands.add(new Command("2D", "DCR L"));
 
+        Commands.add(new Command("FE", "CPI", 1, 1));
+        Commands.add(new Command("CA", "JZ", 1, 2));
+
         Commands.add(new Command("3E", "MVI A,", 1, 1));
         Commands.add(new Command("06", "MVI B,", 1, 1));
         Commands.add(new Command("0E", "MVI C,", 1, 1));
@@ -192,6 +195,14 @@ public class CommandSystem {
                 break;
             case 0x2D:
                 RS.setRegisterL((short)(RS.getRegisterL()+1));
+                break;
+
+            case 0xFE:
+                if (RS.getRegisterA()-MS.getMemoryValueLast() == 0) RS.setZFlag(true);
+                break;
+
+            case 0xCA:
+                if (RS.getZFlag()) MS.setIterator(MS.getMemoryValueLast());
                 break;
 
             case 0x3E:

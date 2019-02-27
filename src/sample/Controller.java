@@ -22,8 +22,9 @@ import java.util.Date;
 
 public class Controller {
     private ObservableList<RegisterTableLine> RegisterTableList = FXCollections.observableArrayList();
-    private ObservableList<MemoryTableLine> MemoryTableList = FXCollections.observableArrayList();
+    private ObservableList<FlagTableLine> FlagTableList = FXCollections.observableArrayList();
     private ObservableList<PortTableLine> PortTableList = FXCollections.observableArrayList();
+    private ObservableList<MemoryTableLine> MemoryTableList = FXCollections.observableArrayList();
 
     @FXML
     ScrollPane UICodePanel;
@@ -53,13 +54,22 @@ public class Controller {
     TableColumn<MemoryTableLine, String> UIMemoryTableValueColumn;
 
     @FXML
+    TableView UIFlagTable;
+
+    @FXML
+    TableColumn<FlagTableLine, String> UIFlagTableNameColumn;
+
+    @FXML
+    TableColumn<FlagTableLine, String> UIFlagTableStateColumn;
+
+    @FXML
     TableView UIPortTable;
 
     @FXML
-    TableColumn<MemoryTableLine, String> UIPortTableNumColumn;
+    TableColumn<PortTableLine, String> UIPortTableNumColumn;
 
     @FXML
-    TableColumn<MemoryTableLine, String> UIPortTableValueColumn;
+    TableColumn<PortTableLine, String> UIPortTableValueColumn;
 
     private Stage mStage;
     private int StepNum;
@@ -79,10 +89,13 @@ public class Controller {
         ShowLineNums();
         UIRegisterTableNameColumn.setCellValueFactory(new PropertyValueFactory<>("registerName"));
         UIRegisterTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
-        UIMemoryTableAddressColumn.setCellValueFactory(new PropertyValueFactory<>("memoryAddress"));
-        UIMemoryTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+        UIFlagTableNameColumn.setCellValueFactory(new PropertyValueFactory<>("flagName"));
+        UIFlagTableStateColumn.setCellValueFactory(new PropertyValueFactory<>("state"));
         UIPortTableNumColumn.setCellValueFactory(new PropertyValueFactory<>("portNum"));
         UIPortTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
+
+        UIMemoryTableAddressColumn.setCellValueFactory(new PropertyValueFactory<>("memoryAddress"));
+        UIMemoryTableValueColumn.setCellValueFactory(new PropertyValueFactory<>("value"));
 
         UICodeArea.scrollTopProperty().addListener((obs, oldVal, newVal) -> ShiftLineNums());
         UICodePanel.vvalueProperty().addListener((obs, oldVal, newVal) -> ShiftText());
@@ -221,8 +234,9 @@ public class Controller {
             Send2Log("[Run] Success");
             RunSuccessFlag = true;
             UpdateRegisterTable();
-            UpdateMemoryTable();
+            UpdateFlagTable();
             UpdatePortTable();
+            UpdateMemoryTable();
         }
         ShowLineNums();
     }
@@ -248,8 +262,9 @@ public class Controller {
         CS.ExecuteNextCommand();
         StepNum++;
         UpdateRegisterTable();
-        UpdateMemoryTable();
+        UpdateFlagTable();
         UpdatePortTable();
+        UpdateMemoryTable();
 
         ShowLineNums();
     }
@@ -265,8 +280,9 @@ public class Controller {
         Send2Log("[Reset] Done");
         ShowLineNums();
         UpdateRegisterTable();
-        UpdateMemoryTable();
+        UpdateFlagTable();
         UpdatePortTable();
+        UpdateMemoryTable();
     }
 
     @FXML
@@ -276,8 +292,9 @@ public class Controller {
         else {
             Send2Log("[Run from memory] Success");
             UpdateRegisterTable();
-            UpdateMemoryTable();
+            UpdateFlagTable();
             UpdatePortTable();
+            UpdateMemoryTable();
         }
     }
 
@@ -351,8 +368,19 @@ public class Controller {
         RegisterTableList.add(new RegisterTableLine("E", RS.getRegisterE()));
         RegisterTableList.add(new RegisterTableLine("H", RS.getRegisterH()));
         RegisterTableList.add(new RegisterTableLine("L", RS.getRegisterL()));
-        //RegisterTableList.add(new RegisterTableLine("M", RS.getRegisterM()));
+
         UIRegisterTable.setItems(RegisterTableList);
+    }
+
+    private void UpdateFlagTable() {
+        FlagTableList.clear();
+        FlagTableList.add(new FlagTableLine("CY", RS.getCYFlag()));
+        FlagTableList.add(new FlagTableLine("P", RS.getPFlag()));
+        FlagTableList.add(new FlagTableLine("AC", RS.getACFlag()));
+        FlagTableList.add(new FlagTableLine("Z", RS.getZFlag()));
+        FlagTableList.add(new FlagTableLine("S", RS.getSFlag()));
+
+        UIFlagTable.setItems(FlagTableList);
     }
 
     private void UpdateMemoryTable() {
@@ -382,6 +410,7 @@ public class Controller {
     public void setRS(RegisterSystem _RS) {
         RS = _RS;
         UpdateRegisterTable();
+        UpdateFlagTable();
     }
 
     public void setMS(MemorySystem _MS) {
